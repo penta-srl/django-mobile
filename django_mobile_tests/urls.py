@@ -1,7 +1,4 @@
-try:
-    from django.conf.urls.defaults import *
-except ImportError:
-    from django.conf.urls import *
+from django.urls import re_path as url
 
 from django.shortcuts import render
 from django_mobile.cache import cache_page

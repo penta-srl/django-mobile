@@ -186,7 +186,7 @@ class MobileDetectionMiddlewareTests(BaseTestCase):
         request.META = {
             "HTTP_USER_AGENT": "My Mobile Browser",
         }
-        middleware = MobileDetectionMiddleware()
+        middleware = MobileDetectionMiddleware(request)
         middleware.process_request(request)
         self.assertEqual(set_flavour.call_args, (("mobile", request), {}))
 
@@ -196,7 +196,7 @@ class MobileDetectionMiddlewareTests(BaseTestCase):
         request.META = {
             "HTTP_USER_AGENT": "My Desktop Browser",
         }
-        middleware = MobileDetectionMiddleware()
+        middleware = MobileDetectionMiddleware(request)
         middleware.process_request(request)
         self.assertEqual(set_flavour.call_args, (("full", request), {}))
 
@@ -206,7 +206,7 @@ class SetFlavourMiddlewareTests(BaseTestCase):
         request = Mock()
         request.META = MagicMock()
         request.GET = {}
-        middleware = SetFlavourMiddleware()
+        middleware = SetFlavourMiddleware(request)
         middleware.process_request(request)
         # default flavour is set
         self.assertEqual(get_flavour(), "full")
@@ -216,7 +216,7 @@ class SetFlavourMiddlewareTests(BaseTestCase):
         request = Mock()
         request.META = MagicMock()
         request.GET = {"flavour": "mobile"}
-        middleware = SetFlavourMiddleware()
+        middleware = SetFlavourMiddleware(request)
         middleware.process_request(request)
         self.assertEqual(
             set_flavour.call_args, (("mobile", request), {"permanent": True})
