@@ -20,7 +20,7 @@ class SettingsProxy(object):
                 raise AttributeError('settings object has no attribute "%s"' % attr)
 
 
-class defaults(object):
+class defaults:
     FLAVOURS = (
         "full",
         "mobile",
