@@ -44,7 +44,7 @@ ROOT_URLCONF = "django_mobile_tests.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django_mobile.backend.DjangoMobileBackend",
+        "BACKEND": "django_mobile.backend.mobile.DjangoMobileBackend",
     },
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
