@@ -33,14 +33,18 @@ class defaults:
     FLAVOURS_COOKIE_HTTPONLY = False
     FLAVOURS_SESSION_KEY = "flavour"
     FLAVOURS_TEMPLATE_LOADERS = []
-    for loader in django_settings.TEMPLATES[0]["OPTIONS"]["loaders"]:
-        if isinstance(loader, (tuple, list)) and loader[0] == CACHE_LOADER_NAME:
-            for cached_loader in loader[1]:
-                if cached_loader != DJANGO_MOBILE_LOADER:
-                    FLAVOURS_TEMPLATE_LOADERS.append(cached_loader)
-        elif loader != DJANGO_MOBILE_LOADER:
-            FLAVOURS_TEMPLATE_LOADERS.append(loader)
+    try:
+        for loader in django_settings.TEMPLATES[0]["OPTIONS"]["loaders"]:
+            if isinstance(loader, (tuple, list)) and loader[0] == CACHE_LOADER_NAME:
+                for cached_loader in loader[1]:
+                    if cached_loader != DJANGO_MOBILE_LOADER:
+                        FLAVOURS_TEMPLATE_LOADERS.append(cached_loader)
+            elif loader != DJANGO_MOBILE_LOADER:
+                FLAVOURS_TEMPLATE_LOADERS.append(loader)
+    except:
+        print("ERRROR IN INIT")
     FLAVOURS_TEMPLATE_LOADERS = tuple(FLAVOURS_TEMPLATE_LOADERS)
 
 
 settings = SettingsProxy(django_settings, defaults)
+# assert False

@@ -44,8 +44,13 @@ ROOT_URLCONF = "django_mobile_tests.urls"
 
 TEMPLATES = [
     {
+        "BACKEND": "django_mobile.backend.DjangoMobileBackend",
+    },
+    {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(PROJECT_ROOT, "templates"),],
+        "DIRS": [
+            os.path.join(PROJECT_ROOT, "templates"),
+        ],
         "OPTIONS": {
             "context_processors": [
                 "django.contrib.auth.context_processors.auth",
@@ -57,17 +62,17 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
             "loaders": [
-                (
-                    "django_mobile.loader.CachedLoader",
-                    (
-                        "django_mobile.loader.Loader",
-                        "django.template.loaders.filesystem.Loader",
-                        "django.template.loaders.app_directories.Loader",
-                    ),
-                ),
+                # (
+                # "django_mobile.loader.CachedLoader",
+                # (
+                # "django_mobile.loader.Loader",
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+                # ),
+                #   ),
             ],
         },
-    }
+    },
 ]
 
 MIDDLEWARE = (

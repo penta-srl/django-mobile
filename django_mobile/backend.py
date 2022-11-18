@@ -1,9 +1,15 @@
-from django.conf import settings
+# from django.conf import settings
 from django.template import TemplateDoesNotExist
 from django.template.backends.base import BaseEngine
+from django_mobile.conf import settings
 
 from django_mobile import get_flavour
 from django_mobile.compat import template_loader
+from django.template import engines as django_engines
+
+
+def _engine_list(using=None):
+    return django_engines.all() if using is None else [django_engines[using]]
 
 
 class DjangoMobileBackend(BaseEngine):
@@ -31,21 +37,24 @@ class DjangoMobileBackend(BaseEngine):
         """Iterate over configured Backends
         and return the value from the first one to find the template.
         """
+
         template_name = self._prepare_template_name(template_name)
-        for loader in self.template_backends:
+        for engine in self.engine_backends:
             try:
-                return loader.get_template(template_name, skip)
+                return engine.get_template(template_name)
             except TemplateDoesNotExist:
                 pass
         raise TemplateDoesNotExist("Tried %s" % template_name)
 
     @property
-    def template_backends(self):
+    def engine_backends(self):
         if not self._template_backends:
-            loaders = []
-            for loader_name in settings.FLAVOURS_TEMPLATE_BACKENDS:
-                loader = template_loader(loader_name)
-                if loader is not None:
-                    loaders.append(loader)
-            self._template_backends = tuple(loaders)
+            engines = _engine_list()
+            engines = [x for x in engines if "DjangoMobileBackend" not in str(x)]
+            # loaders = []
+            # for loader_name in settings.FLAVOURS_TEMPLATE_BACKENDS:
+            #     loader = template_loader(loader_name)
+            #     if loader is not None:
+            #         loaders.append(loader)
+            self._template_backends = tuple(engines)
         return self._template_backends
