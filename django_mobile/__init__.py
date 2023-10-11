@@ -79,7 +79,10 @@ flavour_storage = ProxyBackend()
 
 def get_flavour(request=None, default=None):
     flavour = None
+    print('get_flavour, request1=', request)
+    print('_local', _local)
     request = request or getattr(_local, "request", None)
+    print('get_flavour, request2=', request)
     # get flavour from storage if enabled
     if request:
         flavour = flavour_storage.get(request)
@@ -98,6 +101,8 @@ def get_flavour(request=None, default=None):
 
     # if something went wrong we return the very default flavour
     if flavour not in settings.FLAVOURS:
+        print(f'something went wrong, flavour=', flavour)
+        print(f'settings.FLAVOURS', settings.FLAVOURS)
         flavour = settings.FLAVOURS[0]
         if flavour:
             print('flavour from default setting', flavour)
@@ -105,19 +110,25 @@ def get_flavour(request=None, default=None):
 
 
 def set_flavour(flavour, request=None, permanent=False):
+    print('set_flavour', flavour)
     if flavour not in settings.FLAVOURS:
         raise ValueError(
             "'%r' is no valid flavour. Allowed flavours are: %s"
             % (flavour, ", ".join(settings.FLAVOURS),)
         )
+    print('set_flavour, request1=', request)
     request = request or getattr(_local, "request", None)
+    print('set_flavour, request2=', request)
+    print('set_flavour, _local', _local)
     if request:
+        print('set_flavour, request', request)
         request.flavour = flavour
         if permanent:
             flavour_storage.set(request, flavour)
     elif permanent:
         raise ValueError("Cannot set flavour permanently, no request available.")
-    _local.flavour = flavour
+    # _local.flavour = flavour
+    print('_local', _local)
 
 
 def _set_request_header(request, flavour):
