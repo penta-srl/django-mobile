@@ -176,6 +176,9 @@ class MobileDetectionMiddleware(MiddlewareMixin):
                 if self.user_agents_test_match_regex.match(user_agent):
                     is_mobile = True
 
+        print(request.META)
+        print("is_mobile", is_mobile)
+
         if is_mobile:
             set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
         else:
