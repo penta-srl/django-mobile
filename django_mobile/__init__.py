@@ -83,15 +83,24 @@ def get_flavour(request=None, default=None):
     # get flavour from storage if enabled
     if request:
         flavour = flavour_storage.get(request)
+        if flavour:
+            print('flavour from storage', flavour)
     # check if flavour is set on request
     if not flavour and hasattr(request, "flavour"):
         flavour = request.flavour
+        if flavour:
+            print('flavour from request', flavour, request)
     # if set out of a request-response cycle its stored on the thread local
     if not flavour:
         flavour = getattr(_local, "flavour", default)
+        if flavour:
+            print('flavour from _local thread', flavour)
+
     # if something went wrong we return the very default flavour
     if flavour not in settings.FLAVOURS:
         flavour = settings.FLAVOURS[0]
+        if flavour:
+            print('flavour from default setting', flavour)
     return flavour
 
 
