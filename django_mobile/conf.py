@@ -42,7 +42,7 @@ class defaults:
             elif loader != DJANGO_MOBILE_LOADER:
                 FLAVOURS_TEMPLATE_LOADERS.append(loader)
     except:
-        print("ERRROR IN INIT")
+        print("ERROR IN INIT")
     FLAVOURS_TEMPLATE_LOADERS = tuple(FLAVOURS_TEMPLATE_LOADERS)
 
 
