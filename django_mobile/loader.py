@@ -11,7 +11,16 @@ class Loader(BaseLoader):
     _template_source_loaders = None
 
     def get_contents(self, origin):
-        return origin.loader.get_contents(origin)
+        if origin.loader:
+            return origin.loader.get_contents(origin)
+        else:
+            # compatibilità debug toolbar
+            try:
+                with open(origin.name, encoding=self.engine.file_charset) as fp:
+                    return fp.read()
+            except FileNotFoundError:
+                raise TemplateDoesNotExist(origin)
+
 
     def get_template_sources(self, template_name):
         template_name = self._prepare_template_name(template_name)
